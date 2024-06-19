@@ -1,9 +1,19 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css"
 import { useNavigate } from "react-router-dom";
+import api from "../API/api";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+// import toast from "react-hot-toast";
+import { useCart } from "../Context/CartContext";
+import { Backdrop, CircularProgress, Rating } from "@mui/material";
+
+import { Card } from 'primereact/card';
+import toast from "react-hot-toast";
+
 
 function Dashboard() {
 
+    const { addToCart } = useCart();
 
     const [category] = useState([
         {
@@ -48,6 +58,8 @@ function Dashboard() {
         },
     ]);
 
+    const [product, setProducts] = useState([]);
+    const [loader, setloader] = React.useState(false);
 
     const navigate = useNavigate();
 
@@ -55,10 +67,37 @@ function Dashboard() {
         navigate(`/${title}`);
     };
 
+    const menProducts = product.filter(product => product.category === "Men's");
+    const womenProducts = product.filter(product => product.category === "Women");
+    const mobileProducts = product.filter(product => product.category === "Mobile");
+    // const watchProducts = product.filter(product => product.category === "Watch");
+    const tvProducts = product.filter(product => product.category === "TV");
+    const acProducts = product.filter(product => product.category === "AC");
+
+    useEffect(() => {
+        setloader(true);
+        const getProducts = async () => {
+            try {
+                const response = await api.get('/product');
+                setProducts(response.data);
+                setloader(false);
+            } catch (error) {
+                console.log('Error', error);
+                toast.error('Error to Load Product')
+                setloader(false);
+            }
+        };
+
+        getProducts();
+    }, []);
+
 
 
     return (
         <>
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className="line-slider-container">
                 {category.map((a, index) => (
                     <div className="slider-item" key={index}>
@@ -74,7 +113,7 @@ function Dashboard() {
                 ))}
             </div>
 
-    <br/>
+            <br />
 
             <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
                 <div className="carousel-indicators">
@@ -134,6 +173,306 @@ function Dashboard() {
             <div className="mt-5">
                 <img src="https://assets.ajio.com/cms/AJIO/WEB/D-1.0-UHP-25102023-Trust%20Marker.jpg" width="100%" alt="" />
             </div>
+            <div className="mt-5">
+                <img src="https://assets.ajio.com/cms/AJIO/WEB/D-1.0-UHP-14062024-SpecialCollection-halfbanner.gif" onClick={() => handleNavigate('Mens')} width="100%" alt="" />
+            </div>
+
+
+
+            {/* <div className="product-container">
+                <div className="product-box">
+                    <h2>Top Men's Clothing</h2>
+                    <button className="btn btn-primary" onClick={() => handleNavigate('Mens')}>View All</button>
+                </div>
+            </div>
+            <div className="product-cart">
+                {menProducts.slice(5, 9).map((product) => (
+                    <div className="product-cart-item" key={product.id}>
+                        <i className="bi bi-bookmark"></i>
+                        <div className="product-image" id={product.id}>
+                            <img
+                                src={product.image}
+                                alt={product.title}
+
+                            />
+                        </div>
+                        <div className="product-details m-2">
+                            <h6 className="product-title">{product.brand}</h6>
+                            <p className="product-title">{product.title}</p>
+                            <div className="product-price">₹ {product.price}</div>
+                            <button
+                                className="p-ripple p-element p-button p-component p-button-icon-only"
+                                onClick={() => addToCart(product)}
+                                id="product-add-to-cart"
+                            >
+                                <AddShoppingCartIcon />
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div> */}
+
+            <div className="container-fluid mt-5">
+                <Card title="Top Men's Clothing">
+
+                    <div className="product-cart">
+                        {menProducts.slice(5, 9).map((product) => (
+                            <div className="product-cart-item" key={product.id}>
+                                <i className="bi bi-bookmark"></i>
+                                <div className="product-image" id={product.id}>
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+
+                                    />
+                                </div>
+                                <div className="product-details m-2">
+                                    <h6 className="product-title">{product.brand}</h6>
+                                    <p className="product-title">{product.title}</p>
+                                    <div className="product-rating">
+                                    <Rating name="half-rating-read" defaultValue={+product.rating.star} precision={0.5} readOnly />
+                                    </div>
+                                    <div className="product-price">₹ {product.price}</div>
+                                    <button
+                                        className="p-ripple p-element p-button p-component p-button-icon-only"
+                                        onClick={() => addToCart(product)}
+                                        id="product-add-to-cart"
+                                    >
+                                        <AddShoppingCartIcon />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="btn btn-primary" onClick={() => handleNavigate('Mens')}>View All</button>
+                    </div>
+
+                </Card>
+            </div>
+
+            <div id="carouselExample" className="carousel slide mt-4" data-bs-ride="carousel" data-bs-interval="2000">
+                <div className="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                </div>
+                <div className="carousel-inner">
+                    <div className="carousel-item active">
+                        <img
+                            src="https://assets.ajio.com/cms/AJIO/WEB/71x21-rev%20(9).jpg"
+                            onClick={() => handleNavigate('Mens')}
+                            className="d-block w-100"
+                            alt="Watch"
+                        />
+                        <div className="carousel-caption d-none d-md-block"></div>
+                    </div>
+                    <div className="carousel-item">
+                        <img
+                            src="https://assets.ajio.com/cms/AJIO/WEB/1440x128BOB.jpg"
+                            onClick={() => handleNavigate('Watch')}
+                            className="d-block w-100"
+                            alt="Watch"
+                        />
+                        <div className="carousel-caption d-none d-md-block"></div>
+                    </div>
+                    <div className="carousel-item">
+                        <img
+                            src="https://assets.ajio.com/cms/AJIO/WEB/1440x128phonepe.jpg"
+                            onClick={() => handleNavigate('Mobiles')}
+                            className="d-block w-100"
+                            alt="Mobiles"
+                        />
+                        <div className="carousel-caption d-none d-md-block"></div>
+                    </div>
+                    <div className="carousel-item">
+                        <img
+                            src="https://assets.ajio.com/cms/AJIO/WEB/1440x128-without%20CTA%202a.jpg"
+                            onClick={() => handleNavigate('Mens')}
+                            className="d-block w-100"
+                            alt="Mens"
+                        />
+                        <div className="carousel-caption d-none d-md-block"></div>
+                    </div>
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            <div className="container-fluid mt-5">
+                <Card title="Top Women's Clothing">
+
+                    <div className="product-cart">
+                        {womenProducts.slice(5, 9).map((product) => (
+                            <div className="product-cart-item" key={product.id}>
+                                <i className="bi bi-bookmark"></i>
+                                <div className="product-image" id={product.id}>
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+
+                                    />
+                                </div>
+                                <div className="product-details m-2">
+                                    <h6 className="product-title">{product.brand}</h6>
+                                    <p className="product-title">{product.title}</p>
+                                    <div className="product-rating">
+                                    <Rating name="half-rating-read" defaultValue={+product.rating.star} precision={0.5} readOnly />
+                                    </div>
+                                    <div className="product-price">₹ {product.price}</div>
+                                    <button
+                                        className="p-ripple p-element p-button p-component p-button-icon-only"
+                                        onClick={() => addToCart(product)}
+                                        id="product-add-to-cart"
+                                    >
+                                        <AddShoppingCartIcon />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="btn btn-primary" onClick={() => handleNavigate('Women')}>View All</button>
+                    </div>
+
+                </Card>
+            </div>
+
+
+
+
+            <div className="container-fluid mt-5">
+                <Card title="Top Mobile">
+
+                    <div className="product-cart">
+                        {mobileProducts.slice(5, 9).map((product) => (
+                            <div className="product-cart-item" key={product.id}>
+                                <i className="bi bi-bookmark"></i>
+                                <div className="product-image" id={product.id}>
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+
+                                    />
+                                </div>
+                                <div className="product-details m-2">
+                                    <h6 className="product-title">{product.brand}</h6>
+                                    <p className="product-title">{product.title}</p>
+                                    <div className="product-rating">
+                                    <Rating name="half-rating-read" defaultValue={+product.rating.star} precision={0.5} readOnly />
+                                    </div>
+                                    <div className="product-price">₹ {product.price}</div>
+                                    <button
+                                        className="p-ripple p-element p-button p-component p-button-icon-only"
+                                        onClick={() => addToCart(product)}
+                                        id="product-add-to-cart"
+                                    >
+                                        <AddShoppingCartIcon />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="btn btn-primary" onClick={() => handleNavigate('Mobiles')}>View All</button>
+                    </div>
+
+                </Card>
+            </div>
+
+
+
+
+            <div className="container-fluid mt-5">
+                <Card title="Top TV's">
+
+                    <div className="product-cart">
+                        {tvProducts.slice(5, 9).map((product) => (
+                            <div className="product-cart-item" key={product.id}>
+                                <i className="bi bi-bookmark"></i>
+                                <div className="product-image" id={product.id}>
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+
+                                    />
+                                </div>
+                                <div className="product-details m-2">
+                                    <h6 className="product-title">{product.brand}</h6>
+                                    <p className="product-title">{product.title}</p>
+                                    <div className="product-rating">
+                                    <Rating name="half-rating-read" defaultValue={+product.rating.star} precision={0.5} readOnly />
+                                    </div>
+                                    <div className="product-price">₹ {product.price}</div>
+                                    <button
+                                        className="p-ripple p-element p-button p-component p-button-icon-only"
+                                        onClick={() => addToCart(product)}
+                                        id="product-add-to-cart"
+                                    >
+                                        <AddShoppingCartIcon />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="btn btn-primary" onClick={() => handleNavigate('TV')}>View All</button>
+                    </div>
+
+                </Card>
+            </div>
+
+
+
+
+            <div className="container-fluid mt-5">
+                <Card title="Top AC">
+
+                    <div className="product-cart">
+                        {acProducts.slice(5, 9).map((product) => (
+                            <div className="product-cart-item" key={product.id}>
+                                <i className="bi bi-bookmark"></i>
+                                <div className="product-image" id={product.id}>
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+
+                                    />
+                                </div>
+                                <div className="product-details m-2">
+                                    <h6 className="product-title">{product.brand}</h6>
+                                    <p className="product-title">{product.title}</p>
+                                    <div className="product-rating">
+                                    <Rating name="half-rating-read" defaultValue={+product.rating.star} precision={0.5} readOnly />
+                                    </div>
+                                    <div className="product-price">₹ {product.price}</div>
+                                    <button
+                                        className="p-ripple p-element p-button p-component p-button-icon-only"
+                                        onClick={() => addToCart(product)}
+                                        id="product-add-to-cart"
+                                    >
+                                        <AddShoppingCartIcon />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="btn btn-primary" onClick={() => handleNavigate('AC')}>View All</button>
+                    </div>
+
+                </Card>
+            </div>
+
+
+
 
         </>
     );
