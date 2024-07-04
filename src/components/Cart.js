@@ -62,6 +62,7 @@ function Cart() {
         };
 
         getProducts();
+        window.scrollTo(0,0);
     }, [cookies.email, calculateTotalPrice]);
 
 
@@ -92,8 +93,10 @@ function Cart() {
             try {
                 setloader(true);
                 const response = await api.get(`/CartHistory/${cookies.email}`);
-                // console.log(response.data);
-                setcartItem(response.data)
+                if(response.data.length===0){
+                    setShipping(0);
+                }
+                setcartItem(response.data);
                 setloader(false);
                 calculateTotalPrice(response.data);
             } catch (error) {

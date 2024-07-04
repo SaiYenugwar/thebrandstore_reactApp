@@ -1,11 +1,11 @@
+import { Backdrop, CircularProgress, Rating } from "@mui/material";
+import { useEffect, useState } from "react";
+import api from "../../API/api";
+import toast from "react-hot-toast";
+import { useCart } from "../../Context/CartContext";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { Backdrop, CircularProgress, Rating } from '@mui/material';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useCart } from '../../Context/CartContext';
-import api from '../../API/api';
 
-function Women() {
+function TV() {
     const [loader, setloader] = useState(false);
     const [product, setProducts] = useState([]);
     const { addToCart } = useCart();
@@ -28,20 +28,20 @@ function Women() {
         getProducts();
     }, []);
 
-    var womenProducts = product.filter(product => product.category === "Women");
+    var TVProducts = product.filter(product => product.category === "TV");
+
 
     return (
-
         <>
             <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}>
                 <CircularProgress color="inherit" />
             </Backdrop>
 
             <div className="container-fluid mt-5">
-                <h1 className="text-center text-primary"> Women</h1>
+                <h1 className="text-center text-primary"> TV</h1>
 
                 <div className="product-cart mt-4">
-                    {womenProducts.map((product) => (
+                    {TVProducts.map((product) => (
                         <div className="product-cart-item" key={product.id}>
                             <i className="bi bi-bookmark"></i>
                             <div className="product-image" id={product.id}>
@@ -74,8 +74,7 @@ function Women() {
             </div>
 
         </>
-
     );
   }
   
-  export default Women;
+  export default TV;

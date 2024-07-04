@@ -87,7 +87,7 @@ function Dashboard() {
                 setloader(false);
             }
         };
-
+        window.scrollTo(0,0);
         getProducts();
     }, []);
 
