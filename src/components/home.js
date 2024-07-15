@@ -1,5 +1,5 @@
 import React, {  useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Backdrop, Badge, Button, CircularProgress, Dialog, DialogContent } from "@mui/material";
 import "./login.css";
 import toast, { Toaster } from "react-hot-toast";
@@ -124,11 +124,14 @@ function Home() {
     }));
   };
 
+  const navigate = useNavigate();
+
   const accept = () => {
     removeCookie('username', { path: '/' });
     removeCookie('email', { path: '/' });
     removeCookie('token', { path: '/' });
     localStorage.clear();
+    navigate('/');
     toast.success("Logout Successfully");
     window.location.reload();
   }

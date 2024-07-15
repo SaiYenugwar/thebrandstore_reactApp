@@ -39,45 +39,45 @@ function Footer() {
           <h6 className="text-uppercase fw-bold mb-4">
             <img src="https://firebasestorage.googleapis.com/v0/b/album-b07e6.appspot.com/o/profile%2FBrand.png?alt=media&token=6200f74a-fb30-4642-9508-fd1ef60c99f3" width={100} alt="logo"/>The Brand Store
           </h6>
-          <p>
+          {/* <p>
             Here you can use rows and columns to organize your footer content. Lorem ipsum
             dolor sit amet, consectetur adipisicing elit.
-          </p>
+          </p> */}
         </div>
 
         <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
           <h6 className="text-uppercase fw-bold mb-4">
-            Products
+          Help
           </h6>
           <p>
-            <a href="#!" className="text-reset">Angular</a>
+            <a href="#!" className="text-reset">Track Your Order</a>
           </p>
           <p>
-            <a href="#!" className="text-reset">React</a>
+            <a href="#!" className="text-reset">Return</a>
           </p>
           <p>
-            <a href="#!" className="text-reset">Vue</a>
+            <a href="#!" className="text-reset">Cancellation</a>
           </p>
           <p>
-            <a href="#!" className="text-reset">Laravel</a>
+            <a href="#!" className="text-reset">Payment</a>
           </p>
         </div>
 
         <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
           <h6 className="text-uppercase fw-bold mb-4">
-            Useful links
+          Shop by
           </h6>
           <p>
-            <a href="#!" className="text-reset">Pricing</a>
+            <a href="Mens" className="text-reset">Men</a>
           </p>
           <p>
-            <a href="#!" className="text-reset">Settings</a>
+            <a href="Women" className="text-reset">Women</a>
           </p>
           <p>
-            <a href="#!" className="text-reset">Orders</a>
+            <a href="Mobiles" className="text-reset">Mobile</a>
           </p>
           <p>
-            <a href="#!" className="text-reset">Help</a>
+            <a href="AC" className="text-reset">AC</a>
           </p>
         </div>
 

@@ -62,7 +62,7 @@ function Mens() {
             </Backdrop>
 
             <div className="container-fluid mt-5">
-                <h1 className="text-center text-primary"> Mens's</h1>
+                <h1 className="text-center text-primary"> Men's</h1>
 
            <div className="d-flex justify-content-around">
 
@@ -125,7 +125,7 @@ function Mens() {
                                 </div>
                                 <div className="product-price">₹ {product.price}</div>
                                 <button
-                                    className="p-ripple p-element p-button p-component p-button-icon-only"
+                                    className="p-ripple p-element p-button p-component p-button-icon-only position-static"
                                     onClick={() => addToCart(product)}
                                     id="product-add-to-cart"
                                 >
